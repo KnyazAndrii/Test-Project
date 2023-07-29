@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class DestroyTrigger : MonoBehaviour
 {
-    [SerializeField] private PlayerSize playerSize;
+    [SerializeField] private PlayerSize _playerSize;
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.TryGetComponent(out Collectible collectible))
         {
-            playerSize.CollectibleCollected(collectible.GetSize());
+            _playerSize.CollectibleCollected(collectible.GetPoints());
+
             Destroy(other.gameObject);
         }
     }

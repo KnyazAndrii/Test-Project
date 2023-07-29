@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class Collectible : MonoBehaviour
 {
-    [SerializeField] private float size;
+    [SerializeField] private float points;
     
-    public float GetSize()
+    public float GetPoints()
     {
-        return size;
+        return points;
     }
 }
