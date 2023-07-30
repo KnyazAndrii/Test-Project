@@ -8,8 +8,11 @@ public class PlayerSize : MonoBehaviour
     [SerializeField] private PointBar _pointBar;
     [SerializeField] private CinemachineVirtualCamera _cinemachineVirtualCamera;
 
+    private GameObject _winScreenInstance;
+    private GameObject _BGSound;
+    private Vector3 _scales;
     private float _scaleStep = 4;
-    [SerializeField] private float _totalPoints;
+    private float _totalPoints;
     private const float _firstStepForIncrease = 20;
     private bool _firstStepIncrease = false;
     private const float _secondStepForIncrease = 50;
@@ -20,11 +23,10 @@ public class PlayerSize : MonoBehaviour
     private bool _fourthStepIncrease = false;
     private const float _pointsToWin = 600;
 
-    private Vector3 _scales;
-
     private void Start()
     {
         _scales = gameObject.transform.localScale;
+        _BGSound = GameObject.FindGameObjectWithTag("BGSound");
 
         var transposer = _cinemachineVirtualCamera.GetCinemachineComponent<CinemachineTransposer>();
     }
@@ -35,9 +37,12 @@ public class PlayerSize : MonoBehaviour
         _scales.z += _scaleStep;
 
         transform.localScale = _scales;
-
-        _cinemachineVirtualCamera.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.y *= 2f;
-        _cinemachineVirtualCamera.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.z *= 2f;
+        
+        if (!_thirdStepIncrease)
+        {
+            _cinemachineVirtualCamera.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.y *= 2f;
+            _cinemachineVirtualCamera.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.z *= 2f;
+        }
     }
 
     public void CollectibleCollected(float objectPoints)
@@ -49,11 +54,13 @@ public class PlayerSize : MonoBehaviour
         switch (_totalPoints)
         { 
             case >= _pointsToWin:
-                //win;
+                _BGSound.GetComponent<AudioSource>().Pause();
+                Time.timeScale = 0;
+                _winScreenInstance = Instantiate(Resources.Load<GameObject>("CanvasWin"));
                 break;
 
             case >= _fourthStepForIncrease:
-                if (_fourthStepIncrease)
+                if (!_fourthStepIncrease)
                 {
                     IncreaseScale();
                 }

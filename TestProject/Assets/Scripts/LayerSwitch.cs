@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class LayerSwitch : MonoBehaviour
 {
@@ -9,7 +10,10 @@ public class LayerSwitch : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        //change static
+        if (other.CompareTag("Human"))
+        {
+            other.GetComponent<NavMeshAgent>().enabled = false;
+        }
         other.gameObject.layer = LayerMask.NameToLayer(_enterLayer);
     }
     
