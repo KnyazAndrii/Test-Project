@@ -8,10 +8,13 @@ public class PlayerSize : MonoBehaviour
     [SerializeField] private PointBar _pointBar;
     [SerializeField] private CinemachineVirtualCamera _cinemachineVirtualCamera;
 
-    private float _scaleStep = 2;
-    private float _scaleIncreaseThreshould = 2;
-    private float _pointsForScale;
-    private float _totalPoints;
+    private float _scaleStep = 3;
+    [SerializeField] private float _totalPoints;
+    private const float _firstStepForIncrease = 20;
+    private const float _secondStepForIncrease = 50;
+    private const float _thirdStepForIncrease = 100;
+    private const float _fourthStepForIncrease = 300;
+    private const float _pointsToWin = 600;
 
     private Vector3 _scales;
 
@@ -29,22 +32,41 @@ public class PlayerSize : MonoBehaviour
 
         transform.localScale = _scales;
 
-        _cinemachineVirtualCamera.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.y *= 1.5f;
-        _cinemachineVirtualCamera.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.z *= 1.5f;
+        _cinemachineVirtualCamera.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.y *= 2f;
+        _cinemachineVirtualCamera.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.z *= 2f;
     }
 
     public void CollectibleCollected(float objectPoints)
     {
-        _pointsForScale += objectPoints;
         _totalPoints += objectPoints;
 
         _pointBar.UpdatePoints(_totalPoints);
 
-        if (_pointsForScale >= _scaleIncreaseThreshould)
-        {
-            IncreaseScale();
+        switch (_totalPoints)
+        { 
+            case >= _pointsToWin:
+                //win;
+                break;
 
-            _pointsForScale = _pointsForScale % _scaleIncreaseThreshould;
+            case >= _fourthStepForIncrease:
+                IncreaseScale();
+                break;
+
+            case >= _thirdStepForIncrease:
+                IncreaseScale();
+                break;
+
+            case >= _secondStepForIncrease:
+                IncreaseScale();
+                break;
+
+            case >= _firstStepForIncrease:
+                IncreaseScale();
+                break;
+
+            default:
+                Debug.Log("Not enough points");
+                break;
         }
     }
 }
