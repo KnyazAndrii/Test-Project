@@ -9,6 +9,7 @@ public class LayerSwitch : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        //change static
         other.gameObject.layer = LayerMask.NameToLayer(_enterLayer);
     }
     

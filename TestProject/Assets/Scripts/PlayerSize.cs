@@ -8,12 +8,16 @@ public class PlayerSize : MonoBehaviour
     [SerializeField] private PointBar _pointBar;
     [SerializeField] private CinemachineVirtualCamera _cinemachineVirtualCamera;
 
-    private float _scaleStep = 3;
+    private float _scaleStep = 4;
     [SerializeField] private float _totalPoints;
     private const float _firstStepForIncrease = 20;
+    private bool _firstStepIncrease = false;
     private const float _secondStepForIncrease = 50;
+    private bool _secondStepIncrease = false;
     private const float _thirdStepForIncrease = 100;
+    private bool _thirdStepIncrease = false;
     private const float _fourthStepForIncrease = 300;
+    private bool _fourthStepIncrease = false;
     private const float _pointsToWin = 600;
 
     private Vector3 _scales;
@@ -49,19 +53,35 @@ public class PlayerSize : MonoBehaviour
                 break;
 
             case >= _fourthStepForIncrease:
-                IncreaseScale();
+                if (_fourthStepIncrease)
+                {
+                    IncreaseScale();
+                }
+                _fourthStepIncrease = true;
                 break;
 
             case >= _thirdStepForIncrease:
-                IncreaseScale();
+                if (!_thirdStepIncrease)
+                { 
+                    IncreaseScale();
+                }
+                _thirdStepIncrease = true;
                 break;
 
             case >= _secondStepForIncrease:
-                IncreaseScale();
+                if (!_secondStepIncrease)
+                {
+                    IncreaseScale();
+                }
+                _secondStepIncrease = true;
                 break;
 
             case >= _firstStepForIncrease:
-                IncreaseScale();
+                if (!_firstStepIncrease)
+                {
+                    IncreaseScale();
+                }
+                _firstStepIncrease = true;
                 break;
 
             default:
